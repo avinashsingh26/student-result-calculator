@@ -22,14 +22,22 @@ function calculateStudentResult(name, marks) {
   };
 }
 
-function renderResult(summary) {
-  return `
-    <p><strong>Name:</strong> ${summary.name}</p>
-    <p><strong>Total Marks:</strong> ${summary.total}</p>
-    <p><strong>Percentage:</strong> ${summary.percentage}%</p>
-    <p><strong>Grade:</strong> ${summary.grade}</p>
-    <p><strong>Result:</strong> ${summary.result}</p>
-  `;
+function appendResultLine(container, label, value) {
+  const row = document.createElement("p");
+  const title = document.createElement("strong");
+  title.textContent = `${label}: `;
+  row.appendChild(title);
+  row.appendChild(document.createTextNode(String(value)));
+  container.appendChild(row);
+}
+
+function renderResult(summary, container) {
+  container.textContent = "";
+  appendResultLine(container, "Name", summary.name);
+  appendResultLine(container, "Total Marks", summary.total);
+  appendResultLine(container, "Percentage", `${summary.percentage}%`);
+  appendResultLine(container, "Grade", summary.grade);
+  appendResultLine(container, "Result", summary.result);
 }
 
 if (typeof document !== "undefined") {
@@ -45,11 +53,11 @@ if (typeof document !== "undefined") {
     );
 
     if (!name || marks.some((value) => Number.isNaN(value) || value < 0 || value > 100)) {
-      resultContainer.innerHTML = "<p>Please enter valid input.</p>";
+      resultContainer.textContent = "Please enter valid input.";
       return;
     }
 
     const summary = calculateStudentResult(name, marks);
-    resultContainer.innerHTML = renderResult(summary);
+    renderResult(summary, resultContainer);
   });
 }
